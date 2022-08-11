@@ -25,7 +25,7 @@ public class Cell implements Serializable {
         this(a, b);
         this.value = val;
     }
-    
+
     // Initializes all possible values for a cell
     public void init() {
         possibleValues.clear();
@@ -42,9 +42,9 @@ public class Cell implements Serializable {
             Cell c1 = Board.getCell(this.r, i);
             Cell c2 = Board.getCell(i, this.c);
 
-            if (this.possibleValues.contains(c1.value))    // Row Constraint
+            if (this.possibleValues.contains(c1.value)) // Row Constraint
                 this.possibleValues.remove(this.possibleValues.indexOf(c1.value));
-            if (this.possibleValues.contains(c2.value))    // Column Constaint
+            if (this.possibleValues.contains(c2.value)) // Column Constaint
                 this.possibleValues.remove(this.possibleValues.indexOf(c2.value));
         }
 
@@ -53,7 +53,7 @@ public class Cell implements Serializable {
 
             while (iter.hasNext()) {
                 int val = iter.next().value;
-                if (this.possibleValues.contains(val))     // Sub square Constraint
+                if (this.possibleValues.contains(val)) // Sub square Constraint
                     this.possibleValues.remove(this.possibleValues.indexOf(val));
             }
         }

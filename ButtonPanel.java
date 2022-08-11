@@ -16,14 +16,14 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class ButtonPanel extends JPanel {
-    
-    JButton resetButton = new JButton("Reset");         // Reset the board to initial state
-    JButton solveButton = new JButton("Solve");         // Tries to solve the puzzle from current state
-    JButton restoreButton = new JButton("Restore");     // Loads the last saved state
-    JButton nextButton = new JButton("Next");           // Moves to the next state by assigning a value to a cell
-    JButton genButton = new JButton("Generate");        // Generates a puzzle with a givem difficulty
-    JButton hintsButton = new JButton("Hints");         // Generates a puzzle with a givem difficulty
-    String[] optionsToChoose = {"Easy", "Medium", "Hard"};
+
+    JButton resetButton = new JButton("Reset"); // Reset the board to initial state
+    JButton solveButton = new JButton("Solve"); // Tries to solve the puzzle from current state
+    JButton restoreButton = new JButton("Restore"); // Loads the last saved state
+    JButton nextButton = new JButton("Next"); // Moves to the next state by assigning a value to a cell
+    JButton genButton = new JButton("Generate"); // Generates a puzzle with a givem difficulty
+    JButton hintsButton = new JButton("Hints"); // Generates a puzzle with a givem difficulty
+    String[] optionsToChoose = { "Easy", "Medium", "Hard" };
     JComboBox<String> jComboBox = new JComboBox<>(optionsToChoose);
     JButton dropDownButton;
     SudokuPanel sudokuPanel;
@@ -46,7 +46,6 @@ public class ButtonPanel extends JPanel {
     }
 
     public void addControls() {
-
 
         resetButton.addActionListener(new ActionListener() {
 
@@ -84,29 +83,29 @@ public class ButtonPanel extends JPanel {
                 int count = 0;
                 saveState();
 
-                while(!finished) {
+                while (!finished) {
                     count = 0;
                     isValid = true;
 
-                    while(isValid) {
+                    while (isValid) {
                         isValid = board.collapseBoard();
 
-                        if(isValid) {
+                        if (isValid) {
                             board.updateBoard();
                         }
                     }
 
-                    for(int i = 0; i < Cell.rlim; i++) {
-                        for(int j = 0; j < Cell.clim; j++) {
-                            if(Board.getCell(i, j).value <= 0)
+                    for (int i = 0; i < Cell.rlim; i++) {
+                        for (int j = 0; j < Cell.clim; j++) {
+                            if (Board.getCell(i, j).value <= 0)
                                 count++;
 
-                            if(count > 0)
+                            if (count > 0)
                                 break;
                         }
                     }
 
-                    if(count == 0) {
+                    if (count == 0) {
                         finished = true;
                         break;
                     }
@@ -133,7 +132,7 @@ public class ButtonPanel extends JPanel {
 
             }
         });
-        
+
         genButton.addActionListener(new ActionListener() {
 
             @Override
@@ -152,7 +151,7 @@ public class ButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(!sudokuPanel.displayHints)
+                if (!sudokuPanel.displayHints)
                     sudokuPanel.displayHints = true;
                 else
                     sudokuPanel.displayHints = false;
@@ -179,7 +178,7 @@ public class ButtonPanel extends JPanel {
         try {
             FileOutputStream fout = new FileOutputStream("savedBoard.txt");
             ObjectOutputStream oStream = new ObjectOutputStream(fout);
-            
+
             oStream.writeObject(Board.grid);
             oStream.flush();
             fout.close();
@@ -193,7 +192,7 @@ public class ButtonPanel extends JPanel {
 
     // Loads the saved state of Boars.grid object from savedBoard
     public static void loadState() {
-        
+
         try {
             FileInputStream fin = new FileInputStream("savedBoard.txt");
             ObjectInputStream inStream = new ObjectInputStream(fin);

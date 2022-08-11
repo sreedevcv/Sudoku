@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-
 public class Board {
 
     public static ArrayList<ArrayList<Cell>> grid = new ArrayList<>();
@@ -53,8 +52,8 @@ public class Board {
     }
 
     public void clearBoard() {
-        for(int i = 0; i < Cell.rlim; i++) {
-            for(int j = 0; j < Cell.clim; j++) {
+        for (int i = 0; i < Cell.rlim; i++) {
+            for (int j = 0; j < Cell.clim; j++) {
 
                 Cell c = Board.getCell(i, j);
                 c.init();
@@ -92,21 +91,21 @@ public class Board {
 
                 if (count < min && cell.value < 1) {
                     min = count;
-                    if (min == 0) {             // Checks if board can be solved
-                        unsolvable = true;      // If no possible valus for an unfilled cell, 
-                        break;                  // board cannot be solve
+                    if (min == 0) { // Checks if board can be solved
+                        unsolvable = true; // If no possible valus for an unfilled cell,
+                        break; // board cannot be solve
                     }
                 }
 
-                if(cell.value > 0)
+                if (cell.value > 0)
                     filled++;
             }
         }
 
-        if (unsolvable) {    
+        if (unsolvable) {
             return false;
         }
-        if(filled == 81) {         // Checks if finished
+        if (filled == 81) { // Checks if finished
             return false;
         }
 
@@ -128,7 +127,6 @@ public class Board {
         return true;
     }
 
-
     // Generates puzzle with a given difficulty
     public void generatePuzzle() {
         boolean isValid = true;
@@ -136,52 +134,50 @@ public class Board {
         int fillCount = 0;
         ArrayList<Integer> hiddenCells = new ArrayList<>();
 
-        while(!generated) {
+        while (!generated) {
 
             this.clearBoard();
             fillCount = 0;
             isValid = true;
 
-            while(isValid) {
+            while (isValid) {
                 isValid = this.collapseBoard();
                 this.updateBoard();
                 fillCount++;
             }
 
-            if(fillCount == 82) {
+            if (fillCount == 82) {
                 generated = true;
             }
         }
 
-        for(int i = 0; i < 81; i++)
+        for (int i = 0; i < 81; i++)
             hiddenCells.add(i);
 
         ButtonPanel.saveState();
 
-        if(difficulty == "Easy") {
+        if (difficulty == "Easy") {
 
-            for(int i = 0; i < 45; i++) { 
+            for (int i = 0; i < 45; i++) {
                 int index = r.nextInt(80 - i);
                 hiddenCells.remove(index);
             }
-        }
-        else if(difficulty == "Medium") {
+        } else if (difficulty == "Medium") {
 
-            for(int i = 0; i < 25; i++) { 
+            for (int i = 0; i < 25; i++) {
                 int index = r.nextInt(80 - i);
                 hiddenCells.remove(index);
             }
-        }
-        else if(difficulty == "Hard") {
+        } else if (difficulty == "Hard") {
 
-            for(int i = 0; i < 10; i++) { 
+            for (int i = 0; i < 10; i++) {
                 int index = r.nextInt(80 - i);
                 hiddenCells.remove(index);
             }
         }
 
         Iterator<Integer> iter = hiddenCells.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             int index = iter.next();
             Board.getCell(index / 9, index % 9).value = 0;
         }
