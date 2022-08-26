@@ -38,16 +38,19 @@ public class Sudoku {
         buttonPanel.sudokuPanel = sudokuPanel;
         frame.setIconImage(new ImageIcon(Sudoku.class.getResource("logo.png").getPath()).getImage());
 
-        int x = Cell.rlim * sudokuPanel.cellSize + 3 * sudokuPanel.xOffset;
-        int y = Cell.clim * sudokuPanel.cellSize + 8 * sudokuPanel.yOffset;
+        // int x = Cell.rlim * sudokuPanel.cellSize + 3 * sudokuPanel.xOffset;
+        // int y = Cell.clim * sudokuPanel.cellSize + 8 * sudokuPanel.yOffset;
+
+        int x = 750;
+        int y = 800;
 
         frame.setSize(x, y);
+
+        System.out.println(frame.getSize());
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.add(sudokuPanel, BorderLayout.CENTER);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // SudokuPanel.generatePuzzle();
     }
 
     public static void main(String[] args) {
@@ -57,12 +60,6 @@ public class Sudoku {
 }
 
 /*
-Store the main files in ~/prg/snake/main/java/com/sudoku
-From ~/prg/snake/main/java/com/sudoku run    javac -d ~/prg/snake/target/classes/ *.java
-From ~/prg/snake/ run     java -cp ~/prg/snake/target/classes/ com.sudoku.Sudoku
-Make sure that logo.png is in ~/prg/snake/target/classes/com/sudoku
-
-
 sreedev➤ ~/prg/snake/Sudoku ❯❯❯ javac -d target/classes/ ./main/java/com/sudoku/*.java   
 sreedev➤ ~/prg/snake/Sudoku ❯❯❯ mv main/java/com/sudoku/logo.png target/classes/com/sudoku/
 sreedev➤ ~/prg/snake/Sudoku ❯❯❯ java -cp target/classes/ com.sudoku.Sudoku     

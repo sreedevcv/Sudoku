@@ -29,9 +29,20 @@ public class SudokuPanel extends JPanel {
 
         super.paintComponent(g);
         this.removeAll();
-        g.clearRect(0, 0, getWidth(), getHeight());
+
+        int width = this.getWidth();
+        int height = this.getHeight();
+        int larger = width < height ? width : height;
+        this.cellSize = (larger - xOffset) / 9;
+        Font mainFont = new Font("TimesRoman", Font.PLAIN, (cellSize / 79) * 25);
+        Font subFont = new Font("Serif", Font.PLAIN, (cellSize / 80) * 10);
+
+
+        System.out.println(cellSize);
+
+        g.clearRect(0, 0, width, height);
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        g.fillRect(0, 0, width, height);
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -50,11 +61,12 @@ public class SudokuPanel extends JPanel {
                 g.setColor(Color.BLACK);
                 g.drawRect(x, y, cellSize, cellSize); // Draws the small cell
                 g.setColor(Color.RED);
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+                // g.setFont(new Font("TimesRoman", Font.PLAIN, 5));
+                g.setFont(mainFont);
                 if (cell.value != 0) // Writes the value of the cell
                     g.drawString(String.valueOf(cell.value), (int) (x + cellSize / 2), (int) (y + cellSize / 2));
 
-                g.setFont(new Font("Serif", Font.PLAIN, 10));
+                g.setFont(subFont);
                 if (displayHints)
                     displayPossibleValues(cell, g, x, y); // Displays the possible values of a cell
             }
