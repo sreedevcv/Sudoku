@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.Font;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class SudokuPanel extends JPanel {
@@ -19,7 +21,8 @@ public class SudokuPanel extends JPanel {
     Cell highlightCell = new Cell(-1, -1);
     boolean displayHints = false;
     static Board board;
-
+    Font mainFont = new Font("TimesRoman", Font.PLAIN, 25);
+    Font subFont = new Font("Serif", Font.PLAIN, 10);
     SudokuPanel() {
         addControls();
     }
@@ -35,12 +38,10 @@ public class SudokuPanel extends JPanel {
         int larger = width < height ? width : height;
         this.cellSize = (larger - xOffset) / 9;
 
-        Font mainFont = new Font("TimesRoman", Font.PLAIN, 1);
-        mainFont = mainFont.deriveFont((float) ((cellSize / 79.0) * 25));
-        Font subFont = new Font("Serif", Font.PLAIN, 1);
+        mainFont = mainFont.deriveFont((float) ((cellSize / 80.0) * 25));
         subFont = subFont.deriveFont((float) ((cellSize / 80.0) * 10));
 
-        System.out.println(cellSize + " " + (float) ((cellSize / 80.0) * 25) + " " + (float) ((cellSize / 80.0) * 10));
+        // System.out.println(cellSize + " " + (float) ((cellSize / 80.0) * 25) + " " + (float) ((cellSize / 80.0) * 10));
 
         g.clearRect(0, 0, width, height);
         g.setColor(Color.WHITE);
@@ -85,7 +86,7 @@ public class SudokuPanel extends JPanel {
                     xOffset + 9 * cellSize, i * cellSize + yOffset);
         }
 
-        g.setColor(Color.green);
+        g.setColor(Color.YELLOW);
 
         // Divides the grid into 9 subsquares
         for (int i = 1; i < 3; i++) {
@@ -142,8 +143,22 @@ public class SudokuPanel extends JPanel {
                         highlightCell.value = num;
                     }
 
+                    boolean completed = true;
+
+                    for(int i = 0; i < 9; i++) {
+                        for(int j =  0; j < 9; j++) {
+                            if( Board.getCell(i, j).value == 0) {
+                                completed = false;
+                                break;
+                            }
+                        }
+                    }
+                    
                     board.updateBoard();
                     paintImmediately(getBounds());
+
+                    if(completed)
+                        JOptionPane.showMessageDialog(null, "Solved!");
 
                 } catch (NumberFormatException nfe) {
                     System.out.println("Not a number!");

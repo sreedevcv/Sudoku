@@ -2,6 +2,7 @@ package com.sudoku;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -113,6 +114,7 @@ public class ButtonPanel extends JPanel {
                 }
 
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
+                JOptionPane.showMessageDialog(null, "Solved!");
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
 
