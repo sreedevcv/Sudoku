@@ -143,21 +143,12 @@ public class SudokuPanel extends JPanel {
                         highlightCell.value = num;
                     }
 
-                    boolean completed = true;
-
-                    for(int i = 0; i < 9; i++) {
-                        for(int j =  0; j < 9; j++) {
-                            if( Board.getCell(i, j).value == 0) {
-                                completed = false;
-                                break;
-                            }
-                        }
-                    }
+                    int finished = board.finished();
                     
                     board.updateBoard();
                     paintImmediately(getBounds());
 
-                    if(completed)
+                    if(finished == 1)
                         JOptionPane.showMessageDialog(null, "Solved!");
 
                 } catch (NumberFormatException nfe) {

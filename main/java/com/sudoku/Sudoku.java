@@ -41,7 +41,6 @@ public class Sudoku {
 
         frame.setSize(x, y);
 
-        System.out.println(frame.getSize());
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.add(sudokuPanel, BorderLayout.CENTER);
         frame.setVisible(true);

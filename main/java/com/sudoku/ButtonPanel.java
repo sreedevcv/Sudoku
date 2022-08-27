@@ -69,6 +69,14 @@ public class ButtonPanel extends JPanel {
                 board.collapseBoard();
                 board.updateBoard();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
+
+                int finished = board.finished();
+
+                if (finished == -1)
+                    JOptionPane.showMessageDialog(null, "Unsolvable!");
+                else if (finished == 1)
+                    JOptionPane.showMessageDialog(null, "Solved!");
+
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
             }
@@ -80,12 +88,12 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 boolean isValid = true;
-                boolean finished = false;
-                int count = 0;
+                boolean solvable = false;
+                int finished = 0;
                 saveState();
 
-                while (!finished) {
-                    count = 0;
+                while (true) {
+
                     isValid = true;
 
                     while (isValid) {
@@ -96,25 +104,19 @@ public class ButtonPanel extends JPanel {
                         }
                     }
 
-                    for (int i = 0; i < Cell.rlim; i++) {
-                        for (int j = 0; j < Cell.clim; j++) {
-                            if (Board.getCell(i, j).value <= 0)
-                                count++;
-
-                            if (count > 0)
-                                break;
-                        }
-                    }
-
-                    if (count == 0) {
-                        finished = true;
+                    finished = board.finished();
+                    if (finished == 1 || finished == -1)
                         break;
-                    }
+
                     loadState();
                 }
 
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
-                JOptionPane.showMessageDialog(null, "Solved!");
+                if (finished == 1)
+                    JOptionPane.showMessageDialog(null, "Solved!");
+                else if (finished == -1)
+                    JOptionPane.showMessageDialog(null, "Unsolvable!");
+
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
 

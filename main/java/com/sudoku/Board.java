@@ -183,4 +183,26 @@ public class Board {
         }
         this.updateBoard();
     }
+
+    public int finished() {
+
+        boolean unfilled = false;
+
+        for(int i = 0; i < 9; i++) {
+            for(int j =  0; j < 9; j++) {
+
+                Cell cell = Board.getCell(i, j);
+                
+                if(cell.value == 0 && cell.possibleValues.size() == 0) {
+                    return -1;
+                }
+                else if (cell.value == 0) {
+                    unfilled = true;
+                }
+            }
+        }
+        if(unfilled) return 0;
+
+        return 1;
+    }
 }
