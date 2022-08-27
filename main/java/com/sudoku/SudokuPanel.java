@@ -34,11 +34,13 @@ public class SudokuPanel extends JPanel {
         int height = this.getHeight();
         int larger = width < height ? width : height;
         this.cellSize = (larger - xOffset) / 9;
-        Font mainFont = new Font("TimesRoman", Font.PLAIN, (cellSize / 79) * 25);
-        Font subFont = new Font("Serif", Font.PLAIN, (cellSize / 80) * 10);
 
+        Font mainFont = new Font("TimesRoman", Font.PLAIN, 1);
+        mainFont = mainFont.deriveFont((float) ((cellSize / 79.0) * 25));
+        Font subFont = new Font("Serif", Font.PLAIN, 1);
+        subFont = subFont.deriveFont((float) ((cellSize / 80.0) * 10));
 
-        System.out.println(cellSize);
+        System.out.println(cellSize + " " + (float) ((cellSize / 80.0) * 25) + " " + (float) ((cellSize / 80.0) * 10));
 
         g.clearRect(0, 0, width, height);
         g.setColor(Color.WHITE);
