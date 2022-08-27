@@ -178,7 +178,7 @@ public class ButtonPanel extends JPanel {
     public static void saveState() {
 
         try {
-            FileOutputStream fout = new FileOutputStream("savedBoard.txt");
+            FileOutputStream fout = new FileOutputStream("./target/classes/com/sudoku/savedBoard.txt");
             ObjectOutputStream oStream = new ObjectOutputStream(fout);
 
             oStream.writeObject(Board.grid);
@@ -196,7 +196,7 @@ public class ButtonPanel extends JPanel {
     public static void loadState() {
 
         try {
-            FileInputStream fin = new FileInputStream("savedBoard.txt");
+            FileInputStream fin = new FileInputStream("./target/classes/com/sudoku/savedBoard.txt");
             ObjectInputStream inStream = new ObjectInputStream(fin);
 
             Board.grid = (ArrayList<ArrayList<Cell>>) inStream.readObject();
