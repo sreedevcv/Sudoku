@@ -194,15 +194,15 @@ public class Board {
                 Cell cell = Board.getCell(i, j);
                 
                 if(cell.value == 0 && cell.possibleValues.size() == 0) {
-                    return -1;
+                    return -1;  // Unsolvable
                 }
                 else if (cell.value == 0) {
-                    unfilled = true;
+                    unfilled = true;  // Solvable 
                 }
             }
         }
-        if(unfilled) return 0;
 
-        return 1;
+        if(unfilled) return 0;
+            return 1; // Already solved
     }
 }

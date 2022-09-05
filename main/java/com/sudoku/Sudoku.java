@@ -13,6 +13,9 @@ public class Sudoku {
     /**
      * @param args the command line arguments
      */
+    
+    /*
+     */
 
     JFrame frame;
     SudokuPanel sudokuPanel;

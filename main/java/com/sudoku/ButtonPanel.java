@@ -89,10 +89,13 @@ public class ButtonPanel extends JPanel {
 
                 boolean isValid = true;
                 boolean solvable = false;
-                int finished = 0;
-                saveState();
+                int finished = board.finished();
 
-                while (true) {
+                if(finished >= 0) solvable = true;
+                saveState();
+                sudokuPanel.displayHints = true;
+
+                while (solvable) {
 
                     isValid = true;
 
@@ -101,11 +104,15 @@ public class ButtonPanel extends JPanel {
 
                         if (isValid) {
                             board.updateBoard();
+
+                            try { Thread.sleep(20); }
+                            catch(InterruptedException ie) {}
+                            sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                         }
                     }
 
                     finished = board.finished();
-                    if (finished == 1 || finished == -1)
+                    if (finished == 1)
                         break;
 
                     loadState();
@@ -119,6 +126,7 @@ public class ButtonPanel extends JPanel {
 
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
+                sudokuPanel.displayHints = false;
 
             }
         });
