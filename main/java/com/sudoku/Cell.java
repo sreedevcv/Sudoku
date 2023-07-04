@@ -9,10 +9,10 @@ public class Cell implements Serializable {
     public int r;
     public int c;
     public int value;
-    static int rlim = 9;
-    static int clim = 9;
-    static int valueLimit = 9;
-    static Board board;
+    public static int rlim = 9;
+    public static int clim = 9;
+    public static int valueLimit = 9;
+    private static Board board;
     public ArrayList<Integer> possibleValues = new ArrayList<>();
 
     public Cell(int a, int b) {
@@ -32,6 +32,10 @@ public class Cell implements Serializable {
         for (int i = 1; i <= valueLimit; i++) {
             possibleValues.add(i);
         }
+    }
+
+    public static void setBoard(Board board) {
+        Cell.board = board;
     }
 
     // Updates the possible values for a cell based on the 3 sudoku constraints

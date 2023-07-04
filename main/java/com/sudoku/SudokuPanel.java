@@ -19,11 +19,17 @@ public class SudokuPanel extends JPanel {
     int yOffset = 10;
     Cell highlightCell = new Cell(-1, -1);
     boolean displayHints = false;
-    static Board board;
-    Font mainFont = new Font("TimesRoman", Font.PLAIN, 25);
-    Font subFont = new Font("Serif", Font.PLAIN, 10);
+    
+    private Font mainFont = new Font("TimesRoman", Font.PLAIN, 25);
+    private Font subFont = new Font("Serif", Font.PLAIN, 10);
+    private Board board;
+
     SudokuPanel() {
         addControls();
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override
@@ -40,7 +46,8 @@ public class SudokuPanel extends JPanel {
         mainFont = mainFont.deriveFont((float) ((cellSize / 80.0) * 25));
         subFont = subFont.deriveFont((float) ((cellSize / 80.0) * 10));
 
-        // System.out.println(cellSize + " " + (float) ((cellSize / 80.0) * 25) + " " + (float) ((cellSize / 80.0) * 10));
+        // System.out.println(cellSize + " " + (float) ((cellSize / 80.0) * 25) + " " +
+        // (float) ((cellSize / 80.0) * 10));
 
         g.clearRect(0, 0, width, height);
         g.setColor(Color.WHITE);
@@ -143,11 +150,11 @@ public class SudokuPanel extends JPanel {
                     }
 
                     int finished = board.finished();
-                    
+
                     board.updateBoard();
                     paintImmediately(getBounds());
 
-                    if(finished == 1)
+                    if (finished == 1)
                         JOptionPane.showMessageDialog(null, "Solved!");
 
                 } catch (NumberFormatException nfe) {

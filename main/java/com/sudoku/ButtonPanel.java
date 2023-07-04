@@ -18,18 +18,25 @@ import java.util.ArrayList;
 
 public class ButtonPanel extends JPanel {
 
-    JButton resetButton = new JButton("Reset"); // Reset the board to initial state
-    JButton solveButton = new JButton("Solve"); // Tries to solve the puzzle from current state
-    JButton restoreButton = new JButton("Restore"); // Loads the last saved state
-    JButton nextButton = new JButton("Next"); // Moves to the next state by assigning a value to a cell
-    JButton genButton = new JButton("Generate"); // Generates a puzzle with a givem difficulty
-    JButton hintsButton = new JButton("Hints"); // Generates a puzzle with a givem difficulty
-    String[] optionsToChoose = { "Easy", "Medium", "Hard" };
-    JComboBox<String> jComboBox = new JComboBox<>(optionsToChoose);
-    JButton dropDownButton;
-    SudokuPanel sudokuPanel;
-    Board board;
-    Board saveBoard;
+    private JButton resetButton = new JButton("Reset"); // Reset the board to initial state
+    private JButton solveButton = new JButton("Solve"); // Tries to solve the puzzle from current state
+    private JButton restoreButton = new JButton("Restore"); // Loads the last saved state
+    private JButton nextButton = new JButton("Next"); // Moves to the next state by assigning a value to a cell
+    private JButton genButton = new JButton("Generate"); // Generates a puzzle with a givem difficulty
+    private JButton hintsButton = new JButton("Hints"); // Generates a puzzle with a givem difficulty
+    private String[] optionsToChoose = { "Easy", "Medium", "Hard" };
+    private JComboBox<String> jComboBox = new JComboBox<>(optionsToChoose);
+    private JButton dropDownButton;
+    private SudokuPanel sudokuPanel;
+    private Board board;
+
+    public void setSudokuPanel(SudokuPanel sudokuPanel) {
+        this.sudokuPanel = sudokuPanel;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
     public ButtonPanel() {
 
@@ -52,9 +59,7 @@ public class ButtonPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 saveState();
-
                 board.clearBoard();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 sudokuPanel.setFocusable(true);
@@ -135,13 +140,11 @@ public class ButtonPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 loadState();
                 board.updateBoard();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
-
             }
         });
 
@@ -150,7 +153,6 @@ public class ButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveState();
-
                 board.generatePuzzle();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 sudokuPanel.setFocusable(true);
@@ -202,7 +204,7 @@ public class ButtonPanel extends JPanel {
         }
     }
 
-    // Loads the saved state of Boars.grid object from savedBoard
+    // Loads the saved state of Board.grid object from savedBoard
     public static void loadState() {
 
         try {
