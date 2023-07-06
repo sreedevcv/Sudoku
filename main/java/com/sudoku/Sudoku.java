@@ -8,14 +8,14 @@ import javax.swing.JFrame;
 public class Sudoku {
 
 
-    public Sudoku() {
+    public Sudoku(int size) {
 
         JFrame frame = new JFrame("sudoku");
         SudokuPanel sudokuPanel = new SudokuPanel(); 
         ButtonPanel buttonPanel= new ButtonPanel();
-        Board board = new Board();
+        Board board = new Board(size);
+        Cell.setBoadrSize(size);
 
-        Cell.setBoard(board);
         sudokuPanel.setBoard(board);
         buttonPanel.setBoard(board);
         buttonPanel.setSudokuPanel(sudokuPanel);
@@ -24,7 +24,7 @@ public class Sudoku {
         // int x = Cell.rlim * sudokuPanel.cellSize + 3 * sudokuPanel.xOffset;
         // int y = Cell.clim * sudokuPanel.cellSize + 8 * sudokuPanel.yOffset;
 
-        int x = 750;
+        int x = 800;
         int y = 800;
 
         frame.setSize(x, y);
@@ -37,7 +37,7 @@ public class Sudoku {
 
     public static void main(String[] args) {
 
-        new Sudoku();
+        new Sudoku(16);
     }
 }
 

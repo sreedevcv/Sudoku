@@ -9,24 +9,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 public class ButtonPanel extends JPanel {
 
-    private JButton resetButton = new JButton("Reset"); // Reset the board to initial state
-    private JButton solveButton = new JButton("Solve"); // Tries to solve the puzzle from current state
-    private JButton restoreButton = new JButton("Restore"); // Loads the last saved state
-    private JButton nextButton = new JButton("Next"); // Moves to the next state by assigning a value to a cell
-    private JButton genButton = new JButton("Generate"); // Generates a puzzle with a givem difficulty
-    private JButton hintsButton = new JButton("Hints"); // Generates a puzzle with a givem difficulty
+    private JButton resetButton = new JButton("Reset");         /* Reset the board to initial state */
+    private JButton solveButton = new JButton("Solve");         /* Tries to solve the puzzle from current state */
+    private JButton restoreButton = new JButton("Restore");     /* Loads the last saved state */
+    private JButton nextButton = new JButton("Next");           /* Moves to the next state by assigning a value to a cell */
+    private JButton genButton = new JButton("Generate");        /* Generates a puzzle with a givem difficulty */
+    private JButton hintsButton = new JButton("Hints");         /* Generates a puzzle with a givem difficulty */
     private String[] optionsToChoose = { "Easy", "Medium", "Hard" };
     private JComboBox<String> jComboBox = new JComboBox<>(optionsToChoose);
-    private JButton dropDownButton;
     private SudokuPanel sudokuPanel;
     private Board board;
 
@@ -56,10 +49,9 @@ public class ButtonPanel extends JPanel {
     public void addControls() {
 
         resetButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveState();
+                board.saveState();
                 board.clearBoard();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 sudokuPanel.setFocusable(true);
@@ -68,7 +60,6 @@ public class ButtonPanel extends JPanel {
         });
 
         nextButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.collapseBoard();
@@ -88,19 +79,18 @@ public class ButtonPanel extends JPanel {
         });
 
         solveButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 boolean isValid = true;
                 boolean solvable = false;
-                int finished = board.finished();
+                int finished = board.finished(), triesLimit = 100;
 
                 if(finished >= 0) solvable = true;
-                saveState();
+                board.saveState();
                 sudokuPanel.displayHints = true;
 
-                while (solvable) {
+                while (solvable && triesLimit > 0) {
 
                     isValid = true;
 
@@ -120,14 +110,15 @@ public class ButtonPanel extends JPanel {
                     if (finished == 1)
                         break;
 
-                    loadState();
+                    board.loadState();
+                    triesLimit--;
                 }
 
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 if (finished == 1)
                     JOptionPane.showMessageDialog(null, "Solved!");
                 else if (finished == -1)
-                    JOptionPane.showMessageDialog(null, "Unsolvable!");
+                    JOptionPane.showMessageDialog(null, "Unable to Solve!");
 
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
@@ -137,10 +128,9 @@ public class ButtonPanel extends JPanel {
         });
 
         restoreButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadState();
+                board.loadState();
                 board.updateBoard();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 sudokuPanel.setFocusable(true);
@@ -149,10 +139,9 @@ public class ButtonPanel extends JPanel {
         });
 
         genButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveState();
+                board.saveState();
                 board.generatePuzzle();
                 sudokuPanel.paintImmediately(sudokuPanel.getBounds());
                 sudokuPanel.setFocusable(true);
@@ -161,7 +150,6 @@ public class ButtonPanel extends JPanel {
         });
 
         hintsButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -177,51 +165,11 @@ public class ButtonPanel extends JPanel {
         });
 
         jComboBox.addItemListener(new ItemListener() {
-
             @Override
             public void itemStateChanged(ItemEvent e) {
                 String state = e.getItem().toString();
-                board.difficulty = state;
+                board.setDifficulty(state);
             }
         });
     }
-
-    // Saves the state of the Board.grid onto savedBooard.txt
-    public static void saveState() {
-
-        try {
-            FileOutputStream fout = new FileOutputStream("./target/classes/com/sudoku/savedBoard.txt");
-            ObjectOutputStream oStream = new ObjectOutputStream(fout);
-
-            oStream.writeObject(Board.grid);
-            oStream.flush();
-            fout.close();
-            oStream.close();
-
-        } catch (IOException ioe) {
-            System.out.println("Exception during serialization.");
-            ioe.printStackTrace();
-        }
-    }
-
-    // Loads the saved state of Board.grid object from savedBoard
-    public static void loadState() {
-
-        try {
-            FileInputStream fin = new FileInputStream("./target/classes/com/sudoku/savedBoard.txt");
-            ObjectInputStream inStream = new ObjectInputStream(fin);
-
-            Board.grid = (ArrayList<ArrayList<Cell>>) inStream.readObject();
-            inStream.close();
-            fin.close();
-
-        } catch (IOException ioe) {
-            System.out.println("Exception during deserialization");
-            ioe.printStackTrace();
-        } catch (ClassNotFoundException cnfe) {
-            System.out.println("Exception during deserialization");
-            cnfe.printStackTrace();
-        }
-    }
-
 }

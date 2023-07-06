@@ -12,17 +12,17 @@ import javax.swing.JPanel;
 
 public class SudokuPanel extends JPanel {
 
-    int cellSize = 80;
-    int row = Cell.rlim;
-    int col = Cell.clim;
-    int xOffset = 10;
-    int yOffset = 10;
-    Cell highlightCell = new Cell(-1, -1);
-    boolean displayHints = false;
-    
+    private int cellSize = 10;
+    // private int size = Cell.size;
+    // private int col = Cell.size;
+    private int offset = 10;
+    // private int offset = 10;
+    private int subSquareSize = 3;
+    private Cell highlightCell = new Cell(-1, -1);
     private Font mainFont = new Font("TimesRoman", Font.PLAIN, 25);
     private Font subFont = new Font("Serif", Font.PLAIN, 10);
     private Board board;
+    public boolean displayHints = false;
 
     SudokuPanel() {
         addControls();
@@ -30,6 +30,7 @@ public class SudokuPanel extends JPanel {
 
     public void setBoard(Board board) {
         this.board = board;
+        subSquareSize = (int) Math.sqrt(board.boardSize);
     }
 
     @Override
@@ -40,27 +41,28 @@ public class SudokuPanel extends JPanel {
 
         int width = this.getWidth();
         int height = this.getHeight();
-        int larger = width < height ? width : height;
-        this.cellSize = (larger - xOffset) / 9;
+        int smaller = width < height ? width : height;
+        this.cellSize = (smaller - 2 * offset) / board.boardSize;
+        // System.out.println(width);
+        // System.out.println(height);
+        // System.out.println(smaller);
+        // System.out.println(cellSize);
 
         mainFont = mainFont.deriveFont((float) ((cellSize / 80.0) * 25));
         subFont = subFont.deriveFont((float) ((cellSize / 80.0) * 10));
-
-        // System.out.println(cellSize + " " + (float) ((cellSize / 80.0) * 25) + " " +
-        // (float) ((cellSize / 80.0) * 10));
 
         g.clearRect(0, 0, width, height);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
 
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
+        for (int i = 0; i < board.boardSize; i++) {
+            for (int j = 0; j < board.boardSize; j++) {
 
-                int x = i * cellSize + xOffset;
-                int y = j * cellSize + yOffset;
-                Cell cell = Board.getCell(i, j);
+                int x = i * cellSize + offset;
+                int y = j * cellSize + offset;
+                Cell cell = board.getCell(i, j);
 
-                if (cell == highlightCell) // Draws the highlighted cell
+                if (cell == highlightCell)                  /* Draws the highlighted cell */
                     g.setColor(Color.LIGHT_GRAY);
                 else
                     g.setColor(Color.BLACK);
@@ -68,45 +70,45 @@ public class SudokuPanel extends JPanel {
                 g.fillRect(x, y, cellSize, cellSize);
 
                 g.setColor(Color.BLACK);
-                g.drawRect(x, y, cellSize, cellSize); // Draws the small cell
+                g.drawRect(x, y, cellSize, cellSize);       /* Draws the small cell */
                 g.setColor(Color.RED);
-                // g.setFont(new Font("TimesRoman", Font.PLAIN, 5));
                 g.setFont(mainFont);
-                if (cell.value != 0) // Writes the value of the cell
+
+                if (cell.value != 0)                        /* Writes the value of the cell */
                     g.drawString(String.valueOf(cell.value), (int) (x + cellSize / 2), (int) (y + cellSize / 2));
 
                 g.setFont(subFont);
                 if (displayHints)
-                    displayPossibleValues(cell, g, x, y); // Displays the possible values of a cell
+                    displayPossibleValues(cell, g, x, y);   /* Displays the possible values of a cell */
             }
         }
 
         g.setColor(Color.WHITE);
 
-        // Divides the grid into 81 squares
-        for (int i = 1; i < 9; i++) {
-            g.drawLine(i * cellSize + xOffset, yOffset,
-                    i * cellSize + xOffset, yOffset + 9 * cellSize);
+        /* Divides the grid into squares */
+        for (int i = 1; i < board.boardSize; i++) {
+            g.drawLine(i * cellSize + offset, offset,
+                    i * cellSize + offset, offset + board.boardSize * cellSize);
 
-            g.drawLine(xOffset, i * cellSize + yOffset,
-                    xOffset + 9 * cellSize, i * cellSize + yOffset);
+            g.drawLine(offset, i * cellSize + offset,
+                    offset + board.boardSize * cellSize, i * cellSize + offset);
         }
 
         g.setColor(Color.YELLOW);
 
-        // Divides the grid into 9 subsquares
-        for (int i = 1; i < 3; i++) {
-            g.drawLine(i * 3 * cellSize + xOffset, yOffset,
-                    i * 3 * cellSize + xOffset, yOffset + 9 * cellSize);
+        /* Divides the grid into subsquares */
+        for (int i = 1; i < subSquareSize; i++) {
+            g.drawLine(i * subSquareSize * cellSize + offset, offset,
+                    i * subSquareSize * cellSize + offset, offset + board.boardSize * cellSize);
 
-            g.drawLine(xOffset, i * 3 * cellSize + yOffset,
-                    xOffset + 9 * cellSize, i * 3 * cellSize + yOffset);
+            g.drawLine(offset, i * subSquareSize * cellSize + offset,
+                    offset + board.boardSize * cellSize, i * subSquareSize * cellSize + offset);
         }
     }
 
     public void addControls() {
 
-        // Gets mouse inputs
+        /* Gets mouse inputs */
         addMouseListener(new MouseAdapter() {
 
             @Override
@@ -115,11 +117,11 @@ public class SudokuPanel extends JPanel {
                 int x = e.getX();
                 int y = e.getY();
 
-                int i = (x - xOffset) / cellSize;
-                int j = (y - yOffset) / cellSize;
+                int i = (x - offset) / cellSize;
+                int j = (y - offset) / cellSize;
 
-                if (i < Cell.clim && j < Cell.rlim) {
-                    highlightCell = Board.getCell(i, j);
+                if (i < board.boardSize && j < board.boardSize) {
+                    highlightCell = board.getCell(i, j);
                     paintImmediately(getBounds());
                 } else {
                     highlightCell = new Cell(-1, -1);
@@ -130,7 +132,7 @@ public class SudokuPanel extends JPanel {
             }
         });
 
-        // Gets keyboard input
+        /* Gets keyboard input */
         addKeyListener(new KeyAdapter() {
 
             @Override
@@ -145,8 +147,7 @@ public class SudokuPanel extends JPanel {
                     num = Integer.parseInt(String.valueOf(keyChar));
 
                     if (highlightCell.possibleValues.contains(num) || num == 0) {
-                        // Allows the cell to only have one of the possible values
-                        highlightCell.value = num;
+                        highlightCell.value = num;      /* Allows the cell to only have one of the possible values */
                     }
 
                     int finished = board.finished();
@@ -170,7 +171,7 @@ public class SudokuPanel extends JPanel {
         requestFocusInWindow();
     }
 
-    // Displays the possible values for a cell inside the cell
+    /* Displays the possible values for a cell inside the cell */
     public void displayPossibleValues(Cell cell, Graphics g, int x, int y) {
         int row = -1, rowSize = 20;
         int col = 0, colSize = 20;
@@ -178,13 +179,13 @@ public class SudokuPanel extends JPanel {
         g.setColor(Color.MAGENTA);
 
         for (int i = 0; i < cell.possibleValues.size(); i++) {
-            if (i % 3 == 0)
-                row = (row + 1) % 3;
+            if (i % subSquareSize == 0)
+                row = (row + 1) % subSquareSize;
 
             g.drawString(String.valueOf(cell.possibleValues.get(i)),
-                    (int) (x + (col * colSize) + xOffset), (int) (y + (row * rowSize) + yOffset * 2));
+                    (int) (x + (col * colSize) + offset), (int) (y + (row * rowSize) + offset * 2));
 
-            col = (col + 1) % 3;
+            col = (col + 1) % subSquareSize;
         }
     }
 
