@@ -1,4 +1,4 @@
-package com.sudoku;
+package sudoku;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,7 +11,8 @@ import java.util.Random;
 
 public class Board {
 
-    public ArrayList<ArrayList<Cell>> grid = new ArrayList<>();
+    public ArrayList<ArrayList<Cell>> grid = new ArrayList<>();    
+    private ArrayList<ArrayList<Cell>> savedGrid;
     private String difficulty = "Easy";
     private Random random = new Random();
     public int boardSize = 9;
@@ -247,39 +248,41 @@ public class Board {
 
     /* Saves the state of the Board.grid onto savedBooard.txt */
     public void saveState() {
+        savedGrid = (ArrayList<ArrayList<Cell>>) grid.clone();
 
-        try {
-            FileOutputStream fout = new FileOutputStream("./target/classes/com/sudoku/savedBoard.txt");
-            ObjectOutputStream oStream = new ObjectOutputStream(fout);
+        // try {
+        //     FileOutputStream fout = new FileOutputStream("./target/classes/com/sudoku/savedBoard.txt");
+        //     ObjectOutputStream oStream = new ObjectOutputStream(fout);
 
-            oStream.writeObject(this.grid);
-            oStream.flush();
-            fout.close();
-            oStream.close();
+        //     oStream.writeObject(this.grid);
+        //     oStream.flush();
+        //     fout.close();
+        //     oStream.close();
 
-        } catch (IOException ioe) {
-            System.out.println("Exception during serialization.");
-            ioe.printStackTrace();
-        }
+        // } catch (IOException ioe) {
+        //     System.out.println("Exception during serialization.");
+        //     ioe.printStackTrace();
+        // }
     }
 
     /* Loads the saved state of Board.grid object from savedBoard */
     public void loadState() {
+        grid = savedGrid;
 
-        try {
-            FileInputStream fin = new FileInputStream("./target/classes/com/sudoku/savedBoard.txt");
-            ObjectInputStream inStream = new ObjectInputStream(fin);
+        // try {
+        //     FileInputStream fin = new FileInputStream("./target/classes/com/sudoku/savedBoard.txt");
+        //     ObjectInputStream inStream = new ObjectInputStream(fin);
 
-            this.grid = (ArrayList<ArrayList<Cell>>) inStream.readObject();
-            inStream.close();
-            fin.close();
+        //     this.grid = (ArrayList<ArrayList<Cell>>) inStream.readObject();
+        //     inStream.close();
+        //     fin.close();
 
-        } catch (IOException ioe) {
-            System.out.println("Exception during deserialization");
-            ioe.printStackTrace();
-        } catch (ClassNotFoundException cnfe) {
-            System.out.println("Exception during deserialization");
-            cnfe.printStackTrace();
-        }
+        // } catch (IOException ioe) {
+        //     System.out.println("Exception during deserialization");
+        //     ioe.printStackTrace();
+        // } catch (ClassNotFoundException cnfe) {
+        //     System.out.println("Exception during deserialization");
+        //     cnfe.printStackTrace();
+        // }
     }
 }

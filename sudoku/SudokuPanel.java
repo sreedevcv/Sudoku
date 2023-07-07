@@ -1,4 +1,4 @@
-package com.sudoku;
+package sudoku;
 
 import java.awt.Color;
 import java.awt.Graphics;

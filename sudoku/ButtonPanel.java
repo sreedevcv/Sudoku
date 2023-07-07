@@ -1,4 +1,4 @@
-package com.sudoku;
+package sudoku;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
