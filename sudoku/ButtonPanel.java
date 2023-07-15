@@ -84,7 +84,8 @@ public class ButtonPanel extends JPanel {
 
                 boolean isValid = true;
                 boolean solvable = false;
-                int finished = board.finished(), triesLimit = 100;
+                int finished = board.finished();
+                int triesLimit = 100;
 
                 if(finished >= 0) solvable = true;
                 board.saveState();
@@ -123,7 +124,6 @@ public class ButtonPanel extends JPanel {
                 sudokuPanel.setFocusable(true);
                 sudokuPanel.requestFocusInWindow();
                 sudokuPanel.displayHints = false;
-
             }
         });
 

@@ -9,7 +9,7 @@ public class Cell implements Serializable {
     public int c;
     public int value;
     private static int boardSize = 9;
-    public ArrayList<Integer> possibleValues = new ArrayList<>();
+    public ArrayList<Integer> possibleValues = new ArrayList<>();    
 
     public Cell(int a, int b) {
         this.r = a;

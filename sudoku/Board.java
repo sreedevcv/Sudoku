@@ -1,18 +1,13 @@
 package sudoku;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 public class Board {
 
-    public ArrayList<ArrayList<Cell>> grid = new ArrayList<>();    
-    private ArrayList<ArrayList<Cell>> savedGrid;
+    public ArrayList<ArrayList<Cell>> grid = new ArrayList<>();
+    private ArrayList<ArrayList<Cell>> savedGrid = new ArrayList<>();
     private String difficulty = "Easy";
     private Random random = new Random();
     public int boardSize = 9;
@@ -22,10 +17,10 @@ public class Board {
         this.boardSize = size;
         ArrayList<Cell> row;
 
+        /* Initializes all cells with 0 value */
         for (int i = 0; i < boardSize; i++) {
-
             row = new ArrayList<>();
-            /* Initializes all cells with 0 value */
+
             for (int j = 0; j < boardSize; j++)
                 row.add(new Cell(i, j, 0));
             grid.add(row);
@@ -110,13 +105,14 @@ public class Board {
 
                 count = cell.possibleValues.size();
 
-                if (count < min && cell.value == 0) {
-                    min = count;
-                    if (min == 0) { /* Checks if board can be solved */
-                        unsolvable = true; /* If no possible valus for an unfilled cell, */
-                        break; /* board cannot be solve */
-                    }
+                /* If there are no possible values for an unfilled, cell, board cannot be solved */
+                if (count == 0) {
+                    unsolvable = true;
+                    break;
                 }
+
+                if (count < min && cell.value == 0)
+                    min = count;
             }
         }
 
@@ -246,43 +242,34 @@ public class Board {
         }
     }
 
-    /* Saves the state of the Board.grid onto savedBooard.txt */
+    /* Saves the state of the grid */
     public void saveState() {
-        savedGrid = (ArrayList<ArrayList<Cell>>) grid.clone();
+        Iterator<ArrayList<Cell>> rowIterator = grid.iterator();
+        ArrayList<Cell> row;
+        Iterator<Cell> cellIterator;
+        Cell cell, tempCell;
 
-        // try {
-        //     FileOutputStream fout = new FileOutputStream("./target/classes/com/sudoku/savedBoard.txt");
-        //     ObjectOutputStream oStream = new ObjectOutputStream(fout);
+        savedGrid.clear();
 
-        //     oStream.writeObject(this.grid);
-        //     oStream.flush();
-        //     fout.close();
-        //     oStream.close();
+        while (rowIterator.hasNext()) {
+            cellIterator = rowIterator.next().iterator();
+            row = new ArrayList<>();
 
-        // } catch (IOException ioe) {
-        //     System.out.println("Exception during serialization.");
-        //     ioe.printStackTrace();
-        // }
+            while (cellIterator.hasNext()) {
+                tempCell = cellIterator.next();
+                cell = new Cell(tempCell.r, tempCell.c, tempCell.value);
+                cell.init();
+                row.add(cell);
+            }
+
+            savedGrid.add(row);
+        }
     }
 
-    /* Loads the saved state of Board.grid object from savedBoard */
+    /* Loads the saved state of grid */
     public void loadState() {
+        ArrayList<ArrayList<Cell>> temp = grid;
         grid = savedGrid;
-
-        // try {
-        //     FileInputStream fin = new FileInputStream("./target/classes/com/sudoku/savedBoard.txt");
-        //     ObjectInputStream inStream = new ObjectInputStream(fin);
-
-        //     this.grid = (ArrayList<ArrayList<Cell>>) inStream.readObject();
-        //     inStream.close();
-        //     fin.close();
-
-        // } catch (IOException ioe) {
-        //     System.out.println("Exception during deserialization");
-        //     ioe.printStackTrace();
-        // } catch (ClassNotFoundException cnfe) {
-        //     System.out.println("Exception during deserialization");
-        //     cnfe.printStackTrace();
-        // }
+        savedGrid = temp;
     }
 }
