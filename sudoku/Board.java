@@ -107,8 +107,7 @@ public class Board {
 
                 /* If there are no possible values for an unfilled, cell, board cannot be solved */
                 if (count == 0) {
-                    unsolvable = true;
-                    break;
+                    return false;
                 }
 
                 if (count < min && cell.value == 0)
@@ -116,9 +115,6 @@ public class Board {
             }
         }
 
-        if (unsolvable) {
-            return false;
-        }
         if (filled == boardSize * boardSize) { /* Checks if finished */
             return false;
         }
